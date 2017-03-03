@@ -1,0 +1,221 @@
+.MODEL SMALL
+
+.DATA
+
+CADENA DB 1,1,1,1
+PESO DB 128,64,32,16,8,4,2,1
+
+BINARIO_NAT DB 0; Valor en binario natural
+COMP_1 DB 0
+COMP_2 DB 0
+EXCESO DB 0
+BIN_SIG DB 0
+
+EXT_BINAT DB 0,0,0,0,0,0,0,0
+EXT_C2 DB 0,0,0,0,0,0,0,0
+EXT_C1 DB 0,0,0,0,0,0,0,0
+EXT_EXCESO DB 0,0,0,0,0,0,0,0
+EXT_BINSIG DB 0,0,0,0,0,0,0,0
+
+
+
+.CODE
+
+MOV AX, SEG CADENA
+MOV DS, AX
+
+MOV BX, 0
+MOV SI, 0
+
+;Binario natural
+EXTENSION:
+MOV AL, CADENA[SI]
+MOV EXT_BINAT[SI+4], AL;Copiamos los bits significativos en las posiciones de menor peso
+
+INC SI
+CMP SI, 4
+JB EXTENSION
+
+MOV SI, 7
+
+BUCLE:;Aplicamos el calculo del binario natural sobre la cadena extendida
+MOV AL, EXT_BINAT[SI]
+MUL PESO[SI]
+ADD BL, AL
+
+DEC SI
+JNZ BUCLE;Salimos si SI = 0
+
+MOV BINARIO_NAT, BL
+
+;Binario con signo
+MOV BL, CADENA[0]
+MOV EXT_BINSIG[0], BL;Copiamos el bit de signo en la posicion de mayor peso
+
+MOV SI, 1
+MOV BX, 0
+
+EXT_SIG:;Obtenemos la cadena extendida
+MOV AL, CADENA[SI]
+MOV EXT_BINSIG[SI+4], AL;Copiamos los bits significativos en las posiciones mas bajas
+
+INC SI
+CMP SI, 4
+JB EXT_SIG
+
+MOV SI, 1
+
+SUMA:
+MOV AL, EXT_BINSIG[SI]
+MUL PESO[SI]
+ADD BL, AL
+
+INC SI
+CMP SI, 8
+JB SUMA
+
+
+CMP EXT_BINSIG[0], 1
+JE NEGATIVO
+JNE SEGUIR
+
+
+NEGATIVO:
+NEG BX
+
+SEGUIR:
+
+MOV BIN_SIG, BL
+
+
+
+;Complemento a 2
+MOV CX, 0
+MOV SI, 0
+
+COPIA_MP:;Copiamos el bit de mayor peso en las primeras 4 posiciones
+MOV AL, CADENA[0]
+MOV EXT_C2[SI], AL
+
+INC SI
+CMP SI, 4
+JB COPIA_MP
+
+MOV SI, 0
+
+COPIA_BITS:;Copiamos el numero original en las 4 ultimas posiciones
+MOV AL, CADENA[SI]
+MOV EXT_C2[SI+4], AL
+
+INC SI
+CMP SI, 4
+JB COPIA_BITS
+
+MOV SI, 0
+
+BUCLE1:;Calculamos valor en binario natural de la cadena extendida
+MOV AL, EXT_C2[SI]
+MUL PESO[SI]
+ADD CL, AL
+
+INC SI
+CMP SI, 8
+JB BUCLE1
+
+CMP EXT_C2[0], 1;Comprobamos si el numero es negativo o positivo
+JE RESTA_C2
+JNE SIGUE_C2
+
+RESTA_C2:
+MOV BX, 256
+SUB BX, CX
+MOV CL, BL
+NEG CL
+
+SIGUE_C2:
+
+MOV COMP_2, CL
+
+;Complemento a 1
+MOV CX, 0
+MOV SI, 0
+
+COPIA_MP2:;Copiamos el bit de mayor peso en las primeras 4 posiciones
+MOV AL, CADENA[0]
+MOV EXT_C1[SI], AL
+
+INC SI
+CMP SI, 4
+JB COPIA_MP2
+
+MOV SI, 0
+
+COPIA_BITS2:;Copiamos el numero original en las 4 ultimas posiciones
+MOV AL, CADENA[SI]
+MOV EXT_C1[SI+4], AL
+
+INC SI
+CMP SI, 4
+JB COPIA_BITS2
+
+MOV SI, 0
+
+BUCLE2:;Calculamos el valor en binario natural de la cadena extendida
+MOV AL, EXT_C1[SI]
+MUL PESO[SI]
+ADD CL, AL
+
+INC SI
+CMP SI, 8
+JB BUCLE2
+
+CMP EXT_C1[0], 1;Comprobamos si el numero es negativo o positivo
+JE RESTA_C1
+JNE SIGUE_C1
+
+RESTA_C1:
+MOV BL, 255
+SUB BL, CL
+MOV CL, BL
+NEG CL
+
+SIGUE_C1:
+
+MOV COMP_1, CL
+
+
+;Exceso 2^(n-1)
+MOV BX, 0
+MOV SI, 0
+
+EXTENSION_EX:
+MOV AL, CADENA[SI]
+MOV EXT_EXCESO[SI+4], AL
+
+INC SI
+CMP SI, 4
+JB EXTENSION_EX
+
+MOV SI, 0
+
+BUCLE3:
+MOV AL, EXT_EXCESO[SI]
+MUL PESO[SI]
+ADD BX, AX
+
+INC SI
+CMP SI, 8; Comparar SI con 0
+JB BUCLE3; Salir si SI > 7
+
+SUB BL, 8;Restamos el exceso al resultado en binario natural
+MOV EXCESO, BL
+
+MOV AH, 4Ch
+INT 21h
+
+END
+
+
+
+
+; [SOURCE]: C:\Users\almu\Desktop\EC1-P1-AlmudenaGarcia\AP3\Pr1.3.asm

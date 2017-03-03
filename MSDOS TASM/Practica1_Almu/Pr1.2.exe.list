@@ -1,0 +1,161 @@
+EMU8086 GENERATED LISTING. MACHINE CODE <- SOURCE.
+ 
+Pr1.2.exe -- emu8086 assembler version: 4.08  
+ 
+[ 18/12/2015  --  0:40:02 ] 
+ 
+===================================================================================================
+[LINE]     LOC: MACHINE CODE                          SOURCE
+===================================================================================================
+ 
+[   1]        :                                       .MODEL SMALL
+[   2]        :                                       
+[   3]        :                                       .DATA
+[   4]        :                                       
+[   5]    0000: 01 01 01 00                           	CADENA DB 1,1,1,0
+[   6]    0004: 08 04 02 01                           	PESO DB 8,4,2,1
+[   7]    0008: 00                                    	BINARIO_NAT DB 0; Valor en binario natural
+[   8]    0009: 00                                    	COMP_1 DB 0
+[   9]    000A: 00                                    	COMP_2 DB 0
+[  10]    000B: 00                                    	EXCESO DB 0
+[  11]        :                                       
+[  12]        :                                       		
+[  13]        :                                       
+[  14]        :                                       .CODE
+[  15]        :                                       
+[  16]    0010: B8 00 00                              	MOV AX, SEG CADENA
+[  17]    0013: 8E D8                                 	MOV DS, AX
+[  18]        :                                       
+[  19]    0015: BB 00 00                              	MOV BX, 0
+[  20]    0018: BE 00 00                              	MOV SI, 0
+[  21]        :                                       
+[  22]        :                                       	;Binario natural
+[  23]    001B:                                       	BUCLE:
+[  24]    001B: 8A 04                                 		MOV AL, CADENA[SI]
+[  25]    001D: F6 64 04                              		MUL PESO[SI]
+[  26]    0020: 03 D8                                 		ADD BX, AX
+[  27]        :                                       
+[  28]    0022: 46                                    		INC SI; Incrementamos registro SI
+[  29]    0023: 83 FE 04                              		CMP SI, 4; Comparar SI con 0
+[  30]    0026: 72 F3                                 	JB BUCLE; Salir si SI < 1
+[  31]        :                                       		
+[  32]    0028: 88 1E 08 00                           	MOV BINARIO_NAT, BL
+[  33]        :                                       
+[  34]        :                                       	;Complemento a 2
+[  35]    002C: B9 00 00                              	MOV CX, 0
+[  36]    002F: BE 00 00                              	MOV SI, 0	
+[  37]        :                                       	
+[  38]    0032:                                       	BUCLE1:;Obtenemos valor en binario natural
+[  39]    0032: 8A 04                                 		MOV AL, CADENA[SI]
+[  40]    0034: F6 64 04                              		MUL PESO[SI]
+[  41]    0037: 03 C8                                 		ADD CX, AX
+[  42]        :                                       		
+[  43]    0039: 46                                    		INC SI   		
+[  44]    003A: 83 FE 04                              		CMP SI, 4
+[  45]    003D: 72 F3                                 	JB BUCLE1
+[  46]        :                                       	
+[  47]    003F: 80 3E 00 00 01                        	CMP CADENA[0], 1
+[  48]    0044: 74 02                                 	JE RESTA_C2
+[  49]    0046: 75 05                                 	JNE SIGUE_C2
+[  50]        :                                       	
+[  51]    0048:                                       	RESTA_C2:
+[  52]    0048: 80 E9 0E                              	    SUB CL, 14;Restamos (2^n)-2 = 14 para obtener el complemento
+[  53]    004B: F6 D9                                 	    NEG CL
+[  54]        :                                       	
+[  55]    004D:                                       	SIGUE_C2:
+[  56]        :                                       	
+[  57]    004D: 88 0E 0A 00                           	MOV COMP_2, CL
+[  58]        :                                       	
+[  59]        :                                       	;Complemento a 1
+[  60]    0051: B9 00 00                              	MOV CX, 0
+[  61]    0054: BE 00 00                              	MOV SI, 0
+[  62]        :                                       	
+[  63]    0057:                                       BUCLE2:;Obtenemos valor en binario natural
+[  64]    0057: 8A 04                                 		MOV AL, CADENA[SI]
+[  65]    0059: F6 64 04                              		MUL PESO[SI]
+[  66]    005C: 03 C8                                 		ADD CX, AX
+[  67]        :                                       		
+[  68]    005E: 46                                    		INC SI
+[  69]    005F: 83 FE 04                              		CMP SI, 4
+[  70]    0062: 72 F3                                 	JB BUCLE2
+[  71]        :                                       	
+[  72]    0064: 80 3E 00 00 01                        	CMP CADENA[0], 1
+[  73]    0069: 74 02                                 	JE RESTA_C1
+[  74]    006B: 75 05                                 	JNE SIGUE_C1
+[  75]        :                                       	
+[  76]    006D:                                       	RESTA_C1:
+[  77]    006D: 80 E9 0F                              	    SUB CL, 15;Restamos (2^n)-1 = 15 para obtener el complemento
+[  78]    0070: F6 D9                                 NEG CL
+[  79]        :                                       	
+[  80]    0072:                                       	SIGUE_C1:
+[  81]        :                                       	
+[  82]    0072: 88 0E 09 00                           	MOV COMP_1, CL
+[  83]        :                                       	
+[  84]        :                                       	
+[  85]        :                                       	;Exceso 2^(n-1)
+[  86]    0076: BB 00 00                              	MOV BX, 0
+[  87]    0079: BE 00 00                              	MOV SI, 0
+[  88]        :                                       		
+[  89]    007C:                                       	BUCLE3:;Obtenemos el valor el binario natural
+[  90]    007C: 8A 04                                 		MOV AL, CADENA[SI]
+[  91]    007E: F6 64 04                              		MUL PESO[SI]
+[  92]    0081: 03 D8                                 		ADD BX, AX
+[  93]        :                                       
+[  94]    0083: 46                                    		INC SI
+[  95]    0084: 83 FE 04                              		CMP SI, 4
+[  96]    0087: 72 F3                                 	JB BUCLE3
+[  97]        :                                       	
+[  98]    0089: 83 EB 08                              	SUB BX, 8;Restamos el exceso al resultado en binario natural
+[  99]    008C: 88 1E 0B 00                           	MOV EXCESO, BL
+[ 100]        :                                       	
+[ 101]    0090: B4 4C                                 	MOV AH, 4Ch
+[ 102]    0092: CD 21                                 	INT 21h
+[ 103]        :                                       
+[ 104]        :                                       END
+[ 105]        :                                       
+[ 106]        :                                       
+ 
+===================================================================================================
+ 
+EXE HEADER - bytes from 0000 to 01FF inclusive.
+
+0000: 4D      -   exe signature (M)
+0001: 5A      -   exe signature (Z)
+0002: 94      -   bytes on last page (l.byte)
+0003: 00      -   bytes on last page (h.byte)
+0004: 02      -   512 byte pages in file (l.byte)
+0005: 00      -   512 byte pages in file (h.byte)
+0006: 01      -   relocations (l.byte)
+0007: 00      -   relocations (h.byte)
+0008: 20      -   paragraphs in header (l.byte)
+0009: 00      -   paragraphs in header (h.byte)
+000A: 00      -   minimum memory (l.byte)
+000B: 00      -   minimum memory (h.byte)
+000C: FF      -   maximum memory (l.byte)
+000D: FF      -   maximum memory (h.byte)
+000E: 00      -   SS - stack segment (l.byte)
+000F: 00      -   SS - stack segment (h.byte)
+0010: 00      -   SP - stack pointer (l.byte)
+0011: 00      -   SP - stack pointer (h.byte)
+0012: 4D      -   check sum (l.byte)
+0013: 5F      -   check sum (h.byte)
+0014: 00      -   IP - instruction pointer (l.byte)
+0015: 00      -   IP - instruction pointer (h.byte)
+0016: 01      -   CS - code segment (l.byte)
+0017: 00      -   CS - code segment (h.byte)
+0018: 1E      -   relocation table adress (l.byte)
+0019: 00      -   relocation table adress (h.byte)
+001A: 00      -   overlay number (l.byte)
+001B: 00      -   overlay number (h.byte)
+001C: 01      -   signature (l.byte)
+001D: 00      -   signature (h.byte)
+001E: 01      -   relocation table - offset inside segment (l.byte)
+001F: 00      -   relocation table - offset inside segment (h.byte)
+0020: 01      -   relocation table - segment anchor (l.byte)
+0021: 00      -   relocation table - segment anchor (h.byte)
+0022 to 01FF  -   reserved relocation area  (00) 
+
+
+
+
+===================================================================================================

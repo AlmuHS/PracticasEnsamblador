@@ -1,0 +1,40 @@
+< THE SYMBOL TABLE >  Pr1.3.exe_  --  emu8086 assembler version: 4.08 
+===================================================================================================
+Name                     	Offset    	Size      	Type      	Segment   
+===================================================================================================
+DATA                     	00000     	-5        	SEGMENT   	(ITSELF)  
+CADENA                   	00000     	1         	VAR       	data      
+PESO                     	00004     	1         	VAR       	data      
+BINARIO_NAT              	0000C     	1         	VAR       	data      
+COMP_1                   	0000D     	1         	VAR       	data      
+COMP_2                   	0000E     	1         	VAR       	data      
+EXCESO                   	0000F     	1         	VAR       	data      
+BIN_SIG                  	00010     	1         	VAR       	data      
+EXT_BINAT                	00011     	1         	VAR       	data      
+EXT_C2                   	00019     	1         	VAR       	data      
+EXT_C1                   	00021     	1         	VAR       	data      
+EXT_EXCESO               	00029     	1         	VAR       	data      
+EXT_BINSIG               	00031     	1         	VAR       	data      
+CODE                     	00004     	-5        	SEGMENT   	(ITSELF)  
+EXTENSION                	0000B     	-1        	LABEL     	code      
+BUCLE                    	00019     	-1        	LABEL     	code      
+EXT_SIG                  	00036     	-1        	LABEL     	code      
+SUMA                     	00044     	-1        	LABEL     	code      
+NEGATIVO                 	0005B     	-1        	LABEL     	code      
+SEGUIR                   	0005D     	-1        	LABEL     	code      
+COPIA_MP                 	00067     	-1        	LABEL     	code      
+COPIA_BITS               	00076     	-1        	LABEL     	code      
+BUCLE1                   	00084     	-1        	LABEL     	code      
+RESTA_C2                 	0009B     	-1        	LABEL     	code      
+SIGUE_C2                 	000A4     	-1        	LABEL     	code      
+COPIA_MP2                	000AE     	-1        	LABEL     	code      
+COPIA_BITS2              	000BD     	-1        	LABEL     	code      
+BUCLE2                   	000CB     	-1        	LABEL     	code      
+RESTA_C1                 	000E2     	-1        	LABEL     	code      
+SIGUE_C1                 	000EA     	-1        	LABEL     	code      
+EXTENSION_EX             	000F4     	-1        	LABEL     	code      
+BUCLE3                   	00102     	-1        	LABEL     	code      
+===================================================================================================
+[ 18/12/2015  --  1:05:20 ] 
+< END >
+ 
