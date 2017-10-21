@@ -1,11 +1,11 @@
-Estos codigos corresponden a las practicas de Estructura de Computadores, del Grado en Ingenieria Informatica de la Universidad de Huelva
+Estos códigos corresponden a las prácticas de Estructura de Computadores, del Grado en Ingeniería Informática de la Universidad de Huelva
 
-El enunciado original esta preparado para programarse sobre un procesador 8086, para MSDOS, usando el ensamblador TASM.
+El enunciado original está preparado para programarse sobre un procesador 8086, para MSDOS, usando el ensamblador TASM.
 
 Las versiones NASM Linux son las adaptaciones a Linux de dichos enunciados.
 
 Dado que Linux no soporta el procesador 8086, estos enunciados se han adaptado al procesador i386, usando como ensamblador NASM.
-Igualmente, todos los ejercicios correspondientes a control de hardware (tarjeta de video, reloj...) en Linux se han adaptado para usar llamadas de sistema.
+Igualmente, todos los ejercicios correspondientes a control de hardware (tarjeta de vídeo, reloj...) en Linux se han adaptado para usar llamadas de sistema.
 
 Para ensamblar, usad: nasm -f elf32 fichero.asm
 Para linkar: ld fichero.o -o fichero -melf_i386
