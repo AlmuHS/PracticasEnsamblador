@@ -1,0 +1,4 @@
+# Binary, object and temporary files
+*.exe
+*.o
+*~
